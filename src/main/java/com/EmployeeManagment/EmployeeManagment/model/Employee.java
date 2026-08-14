@@ -1,0 +1,26 @@
+package com.EmployeeManagment.EmployeeManagment.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Data;
+import org.springframework.stereotype.Component;
+
+@Entity
+@Data
+public class Employee {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String surname;
+    private String gender;
+    private Integer phoneNumber;
+    private String email;
+    private String department;
+    private String employeeType;
+    private String status;
+
+}
