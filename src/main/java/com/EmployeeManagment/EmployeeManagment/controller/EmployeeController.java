@@ -2,6 +2,7 @@ package com.EmployeeManagment.EmployeeManagment.controller;
 
 import com.EmployeeManagment.EmployeeManagment.model.Employee;
 import com.EmployeeManagment.EmployeeManagment.service.IEmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +19,12 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping("/getAllEmployees")
+    @GetMapping()
     public List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
-    @GetMapping("/getEmployeeById/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
         Employee employee = employeeService.getEmployeeById(id);
         if (employee == null) {
@@ -34,7 +35,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/addEmployee")
-    public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<Employee> addEmployee(@Valid @RequestBody Employee employee) {
         Employee employeeIsSaved = employeeService.addEmployee(employee);
         if (employeeIsSaved == null) {
             return ResponseEntity.badRequest().build();
@@ -42,16 +43,16 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(employeeIsSaved);
     }
 
-    @PutMapping("/updateEmployee({id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Employee> updateEmployee(@Valid @PathVariable Long id, @RequestBody Employee employee) {
         Employee employeeToUpdate = employeeService.updateEmployee(employee, id);
         if (employeeToUpdate == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(employeeToUpdate);
     }
 
-    @DeleteMapping("/deleteEmployee/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteEmployee(@PathVariable Long id) {
         boolean employeeHasDeleted = employeeService.deleteEmployee(id);
         if (!employeeHasDeleted) {
@@ -60,3 +61,5 @@ public class EmployeeController {
         return ResponseEntity.ok().build();
     }
 }
+
+

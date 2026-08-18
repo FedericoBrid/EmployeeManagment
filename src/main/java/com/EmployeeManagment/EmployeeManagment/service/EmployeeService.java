@@ -22,9 +22,6 @@ public class EmployeeService implements IEmployeeService{
         if (employee == null) {
             return null;
         }
-        if (!validateEmployee(employee)) {
-            return null;
-        }
         return employeeRepository.save(employee);
     }
 
@@ -32,9 +29,6 @@ public class EmployeeService implements IEmployeeService{
     public Employee updateEmployee(Employee employee, Long id) {
         Employee currentEmployee = getEmployeeById(id);
         if (currentEmployee == null) {
-            return null;
-        }
-        if (!validateEmployee(employee)) {
             return null;
         }
         currentEmployee.setName(employee.getName());
@@ -67,36 +61,5 @@ public class EmployeeService implements IEmployeeService{
     @Override
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
-    }
-
-    public boolean validateEmployee(Employee employee) {
-        if (employee == null) {
-            return false;
-        }
-        if (employee.getName() == null || employee.getName().isEmpty()) {
-            return false;
-        }
-        if (employee.getSurname() == null || employee.getSurname().isEmpty()) {
-            return false;
-        }
-        if (employee.getGender() == null || employee.getGender().isEmpty()) {
-            return false;
-        }
-        if (employee.getPhoneNumber() == null) {
-            return false;
-        }
-        if (employee.getEmail() == null || employee.getEmail().isEmpty()) {
-            return false;
-        }
-        if (employee.getDepartment() == null || employee.getDepartment().isEmpty()) {
-            return false;
-        }
-        if (employee.getEmployeeType() == null || employee.getEmployeeType().isEmpty()) {
-            return false;
-        }
-        if (employee.getStatus() == null || employee.getStatus().isEmpty()) {
-            return false;
-        }
-        return true;
     }
 }
