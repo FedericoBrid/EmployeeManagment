@@ -1,0 +1,48 @@
+services:
+
+  mysql:
+    image: mysql:8.4
+    container_name: employee-management-db
+
+    environment:
+      MYSQL_DATABASE: employee_management
+      MYSQL_USER: employee
+      MYSQL_PASSWORD: employee_password
+      MYSQL_ROOT_PASSWORD: root_password
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -proot_password || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: employee-management-backend
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    environment:
+      BD_URL: jdbc:mysql://mysql:3306/employee_management
+      BD_USERNAME: employee
+      BD_PASSWORD: employee_password
+
+    ports:
+      - "8080:8080"
+
+
+volumes:
+  mysql_data:
